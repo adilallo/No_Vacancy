@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class agent : MonoBehaviour
+public class Agent : MonoBehaviour
 {
     Color myColor;
     Vector3 velocity;
     Vector3 acceleration;
     int maxSpeed = 3;
-    List<agent> allAgents;
+    List<Agent> allAgents;
 
     public float cohesion_radius=0.5f;
     public float cohesion_strength = 0.5f;
@@ -18,20 +18,28 @@ public class agent : MonoBehaviour
     public float allignment_strength = 0.5f;
     public float agility = 0.5f;
 
-    // Start is called before the first frame update
     void Start()
     {
         myColor = new Color(Random.value, Random.value, Random.value);
-        //this.GetComponent<MeshRenderer>().material.color = myColor;
-        //this.GetComponent<TrailRenderer>().material.color = myColor;
 
-        allAgents = FindObjectOfType<manage_swarm>().allAgents;
+        MeshRenderer meshRenderer = this.GetComponent<MeshRenderer>();
+        TrailRenderer trailRenderer = this.GetComponent<TrailRenderer>();
 
-        velocity = Vector3.zero;// Random.insideUnitSphere;
+        if (meshRenderer != null)
+        {
+            meshRenderer.material.color = myColor;
+        }
+
+        if (trailRenderer != null)
+        {
+            trailRenderer.material.color = myColor;
+        }
+
+        // Velocity and rotation initialization
+        velocity = Vector3.zero;
         this.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         acceleration = (cohesion(10*cohesion_radius, cohesion_strength)
@@ -46,12 +54,16 @@ public class agent : MonoBehaviour
         this.transform.position += velocity*Time.deltaTime;
     }
 
+    public void SetAllAgents(List<Agent> agents)
+    {
+        allAgents = agents;
+    }
 
     Vector3 cohesion(float radius, float amount)
     {
         Vector3 average = Vector3.zero;
         int within_radius = 1;
-        foreach (agent a in allAgents)
+        foreach (Agent a in allAgents)
         {
             if (a != this)
             {
@@ -73,7 +85,7 @@ public class agent : MonoBehaviour
     {
         Vector3 average = Vector3.zero;
         int within_radius = 1;
-        foreach (agent a in allAgents)
+        foreach (Agent a in allAgents)
         {
             if (a != this)
             {
@@ -95,7 +107,7 @@ public class agent : MonoBehaviour
     {
         Vector3 average = Vector3.zero;
         int within_radius = 1;
-        foreach (agent a in allAgents)
+        foreach (Agent a in allAgents)
         {
             if (a != this)
             {
