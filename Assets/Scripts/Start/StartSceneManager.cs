@@ -1,32 +1,45 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.Video;
-using UnityEngine.UI;
 
 namespace StartScene
 {
     public class StartSceneManager : MonoBehaviour
     {
-        public VideoPlayer videoPlayer;  
-        public VideoClip initialClip;   
-        public VideoClip secondClip; 
-        public RawImage renderTextureUI;
-        public GameObject imageUI;
+        [HeaderAttribute("Intro Assets")]
+        [SerializeField] private GameObject introImage;
+        [SerializeField] private GameObject introVideo;
+        [SerializeField] private VideoPlayer introVideoPlayer;
 
+        [HeaderAttribute("UI")]
+        [SerializeField] private GameObject UI;
+        [SerializeField] private VideoPlayer stockVideoPlayer;
+        [SerializeField] private VideoPlayer avatarVideoPlayer;
+        [SerializeField] private GameObject playButton;
+        
         private bool mouseMoved = false;
-        private bool secondVideoPlayed = false;
 
         void Start()
         {
-            videoPlayer.clip = initialClip;
-            videoPlayer.Play();
+            introImage.SetActive(true);
+            introVideoPlayer.Prepare();
+            introVideo.SetActive(false);
 
-            Cursor.visible = false;
+            stockVideoPlayer.Prepare();
+            avatarVideoPlayer.Prepare();
+            UI.SetActive(false);
 
-            imageUI.SetActive(false);
+            UnityEngine.Cursor.visible = false;
 
-            videoPlayer.loopPointReached += OnVideoFinished;
+            introVideoPlayer.loopPointReached += OnVideoFinished;
         }
 
+        private void OnDisable()
+        {
+            introVideoPlayer.loopPointReached -= OnVideoFinished;
+        }
+        
         void Update()
         {
             if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
@@ -34,26 +47,36 @@ namespace StartScene
                 if (!mouseMoved)
                 {
                     mouseMoved = true;
-                    SwitchToSecondClip();
+                    StartCoroutine(PlayVideoWhenReady());
                 }
+            }
+
+            if (UI.activeSelf)
+            {
+                playButton.transform.Rotate(0, (float)(24 * Time.deltaTime), 0);
             }
         }
 
-        private void SwitchToSecondClip()
+        private IEnumerator PlayVideoWhenReady()
         {
-            videoPlayer.Stop();
-            videoPlayer.clip = secondClip;
-            videoPlayer.Play();
+            while (!introVideoPlayer.isPrepared)
+            {
+                yield return null;
+            }
+
+            introImage.SetActive(false);
+            introVideo.SetActive(true);
+
+            introVideoPlayer.Play();
         }
 
         private void OnVideoFinished(VideoPlayer vp)
         {
-            if (vp.clip == secondClip && !secondVideoPlayed)
-            {
-                Cursor.visible = true;
-                imageUI.SetActive(true);
-                secondVideoPlayed = true;
-            }
+            UnityEngine.Cursor.visible = true;
+
+            avatarVideoPlayer.Play();
+            stockVideoPlayer.Play();  
+            UI.SetActive(true);
         }
     }
 }
