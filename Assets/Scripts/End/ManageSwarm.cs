@@ -8,28 +8,23 @@ public class ManageSwarm : MonoBehaviour
     public int amount;
     public GameObject cam_rig;
     public List<Agent> allAgents;
-    // Start is called before the first frame update
+
     void Start()
     {
-        // Instantiate agents and add them to the allAgents list centrally
         for (int i = 0; i < amount; i++)
         {
             GameObject selectedPrefab = agent_prefabs[Random.Range(0, agent_prefabs.Count)];
             GameObject newAgent = Instantiate(selectedPrefab, Random.insideUnitSphere * spread, Quaternion.identity);
 
-            // Add the agent's script to the allAgents list
             Agent agentScript = newAgent.GetComponent<Agent>();
             allAgents.Add(agentScript);
 
-            // Pass the reference of allAgents list to each agent
             agentScript.SetAllAgents(allAgents);
         }
 
-        // Optional: Log to check if agents are correctly added
         Debug.Log("Total Agents: " + allAgents.Count);
     }
 
-    // Update is called once per frame
     void Update()
     {
         Vector3 average = Vector3.zero;
@@ -63,7 +58,6 @@ public class ManageSwarm : MonoBehaviour
         updateAllignmentStrength(randomAllignmentStrength);
     }
 
-    //functions attached to the sliders:
     public void updateCohesionRadius(float val)
     {
         foreach (Agent a in allAgents)

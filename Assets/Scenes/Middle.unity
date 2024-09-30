@@ -435,8 +435,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2141101134}
-  - {fileID: 1493932575}
-  - {fileID: 1314463724}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1063,7 +1061,7 @@ GameObject:
   - component: {fileID: 1314463726}
   - component: {fileID: 1314463725}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Right Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1076,13 +1074,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314463723}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2063979280}
-  m_Father: {fileID: 476433020}
+  m_Father: {fileID: 2141101134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1132,7 +1130,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1314463726}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1740468808}
+        m_TargetAssemblyTypeName: MiddleSceneManager, Assembly-CSharp
+        m_MethodName: NextVideo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1314463726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1258,7 +1268,7 @@ GameObject:
   - component: {fileID: 1493932577}
   - component: {fileID: 1493932576}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Left Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1271,17 +1281,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493932574}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1804577566}
-  m_Father: {fileID: 476433020}
+  m_Father: {fileID: 2141101134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 316, y: 121}
+  m_AnchoredPosition: {x: 316, y: 85}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1493932576
@@ -1327,7 +1337,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1493932577}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1740468808}
+        m_TargetAssemblyTypeName: MiddleSceneManager, Assembly-CSharp
+        m_MethodName: PreviousVideo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1493932577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1411,6 +1433,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 760552551}
+  videoPlayer: {fileID: 2118144298}
+  renderTextureUI: {fileID: 880178273}
+  videoClips:
+  - {fileID: 32900000, guid: 126a02da6a1d240e6ab418cb22dd82a6, type: 3}
+  - {fileID: 32900000, guid: 8eca394794a1a49d7a116d5cc1700fd8, type: 3}
+  - {fileID: 32900000, guid: fb22a3bf85fc94e59bfb4d7a220bd8db, type: 3}
+  - {fileID: 32900000, guid: 1e2b1fb759f544c77b1711b8f08934c2, type: 3}
+  - {fileID: 32900000, guid: 6f7f961b24a324e4998ce67634e8ebca, type: 3}
+  - {fileID: 32900000, guid: f2581e2887680418396523c09db3a6d2, type: 3}
+  - {fileID: 32900000, guid: 7c2bfcadd07e341c78717a1075a6223c, type: 3}
+  - {fileID: 32900000, guid: 6c8f4a527eb8e43de874bd91ac1c7170, type: 3}
 --- !u!4 &1740468809
 Transform:
   m_ObjectHideFlags: 0
@@ -1719,7 +1752,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118144297}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 6c8f4a527eb8e43de874bd91ac1c7170, type: 3}
+  m_VideoClip: {fileID: 0}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -1796,6 +1829,8 @@ Transform:
   - {fileID: 1434933097}
   - {fileID: 581738375}
   - {fileID: 760552555}
+  - {fileID: 1493932575}
+  - {fileID: 1314463724}
   m_Father: {fileID: 476433020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
