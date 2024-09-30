@@ -5,15 +5,38 @@ using UnityEngine.UI;
 
 public class MiddleSceneManager : MonoBehaviour
 {
-    [SerializeField] private GameObject playButton;
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private RawImage renderTextureUI;
     [SerializeField] private List<VideoClip> videoClips;
 
-    private int currentVideoIndex = 0; 
+    public static Dictionary<int, int> videoSelections = new Dictionary<int, int>();
+    public static MiddleSceneManager Instance { get; private set; }
+
+    private int currentVideoIndex = 0;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
+        for (int i = 0; i < videoClips.Count; i++)
+        {
+            if (!videoSelections.ContainsKey(i))
+            {
+                videoSelections[i] = 0; 
+            }
+        }
+
         if (videoClips.Count > 0)
         {
             PlayVideo(currentVideoIndex);
@@ -24,9 +47,9 @@ public class MiddleSceneManager : MonoBehaviour
         }
     }
 
-    void Update()
+    public List<VideoClip> GetVideoClips()
     {
-        playButton.transform.Rotate(0, (float)(24 * Time.deltaTime), 0);
+        return videoClips; 
     }
 
     public void NextVideo()
@@ -39,6 +62,20 @@ public class MiddleSceneManager : MonoBehaviour
     {
         currentVideoIndex = (currentVideoIndex - 1 + videoClips.Count) % videoClips.Count;
         PlayVideo(currentVideoIndex);
+    }
+
+    public void OnVideoSelected()
+    {
+        if (videoSelections.ContainsKey(currentVideoIndex))
+        {
+            videoSelections[currentVideoIndex]++;
+        }
+        else
+        {
+            videoSelections[currentVideoIndex] = 1;
+        }
+
+        Debug.Log("Video " + currentVideoIndex + " was selected. Total selections: " + videoSelections[currentVideoIndex]);
     }
 
     private void PlayVideo(int index)

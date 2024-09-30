@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 92192286}
+  - component: {fileID: 92192287}
   - component: {fileID: 92192285}
   m_Layer: 0
   m_Name: Scripts
@@ -161,7 +162,7 @@ MonoBehaviour:
   - {fileID: 8353412086202436871, guid: 326c8281fb8b74df4ac48846a032990a, type: 3}
   - {fileID: 4712600445175409842, guid: 2645979f229e54f98817e36f5df9fdd6, type: 3}
   - {fileID: 4885486871096227200, guid: fcf01120827fd44279f76737709fd97d, type: 3}
-  spread: 5
+  spread: 15
   amount: 50
   cam_rig: {fileID: 1461344151}
   allAgents: []
@@ -180,6 +181,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &92192287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92192284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 238a29061ad3a4d15b72e88ca723f416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leaderboardText: {fileID: 678131341}
 --- !u!1 &356140035
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +740,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -787,8 +801,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 225, y: 50}
+  m_AnchoredPosition: {x: 0, y: 112}
+  m_SizeDelta: {x: 400, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &678131341
 MonoBehaviour:
