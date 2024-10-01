@@ -1,35 +1,34 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor;
 
 namespace Utility
 {
     public class SceneChanger : MonoBehaviour
     {
-        [SerializeField] private SceneAsset firstSceneAsset;
-        [SerializeField] private SceneAsset secondSceneAsset;
+        [SerializeField] private string firstSceneName;
+        [SerializeField] private string secondSceneName;
 
         public void LoadFirstScene()
         {
-            if (firstSceneAsset != null)
+            if (!string.IsNullOrEmpty(firstSceneName))
             {
-                SceneManager.LoadScene(firstSceneAsset.name);
+                SceneManager.LoadScene(firstSceneName); 
             }
             else
             {
-                Debug.LogWarning("First scene asset is not assigned.");
+                Debug.LogWarning("First scene name is not assigned.");
             }
         }
 
         public void LoadSecondScene()
         {
-            if (secondSceneAsset != null)
+            if (!string.IsNullOrEmpty(secondSceneName))
             {
-                SceneManager.LoadScene(secondSceneAsset.name);
+                SceneManager.LoadScene(secondSceneName); 
             }
             else
             {
-                Debug.LogWarning("Second scene asset is not assigned.");
+                Debug.LogWarning("Second scene name is not assigned.");
             }
         }
     }

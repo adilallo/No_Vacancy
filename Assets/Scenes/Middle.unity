@@ -1089,8 +1089,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20cd948ed013ff343ba0741e7f45b8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstSceneAsset: {fileID: 102900000, guid: 69003a479c91ea34f9c0089aa69c7ae5, type: 3}
-  secondSceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+  firstSceneName: Middle
+  secondSceneName: End
 --- !u!114 &1740468808
 MonoBehaviour:
   m_ObjectHideFlags: 0
