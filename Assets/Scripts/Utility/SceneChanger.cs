@@ -7,13 +7,14 @@ namespace Utility
     {
         [SerializeField] private string firstSceneName;
         [SerializeField] private string secondSceneName;
+        [SerializeField] private string thirdSceneName;
 
         private readonly int targetWidth = 800;
         private readonly int targetHeight = 1280;
-        private bool isFullScreen = false;
 
         void Start()
         {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
             SetResolution(targetWidth, targetHeight, false);
         }
 
@@ -23,13 +24,7 @@ namespace Utility
             {
                 ExitGame();
             }
-
-            if (Input.GetKeyDown(KeyCode.F11))
-            {
-                ToggleFullScreen();
-            }
         }
-
 
         public void LoadFirstScene()
         {
@@ -55,6 +50,18 @@ namespace Utility
             }
         }
 
+        public void LoadThirdScene()
+        {
+            if (!string.IsNullOrEmpty(thirdSceneName))
+            {
+                SceneManager.LoadScene(thirdSceneName);
+            }
+            else
+            {
+                Debug.LogWarning("Third scene name is not assigned. ");
+            }
+        }
+
         private void ExitGame()
         {
 #if UNITY_EDITOR
@@ -62,21 +69,6 @@ namespace Utility
 #else
             Application.Quit();
 #endif
-        }
-
-        private void ToggleFullScreen()
-        {
-            isFullScreen = !isFullScreen;
-            if (isFullScreen)
-            {
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                Screen.fullScreen = true;
-            }
-            else
-            {
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                Screen.fullScreen = false;
-            }
         }
 
         private void SetResolution(int width, int height, bool fullscreen)
