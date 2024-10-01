@@ -8,7 +8,14 @@ namespace Utility
         [SerializeField] private string firstSceneName;
         [SerializeField] private string secondSceneName;
 
+        private readonly int targetWidth = 800;
+        private readonly int targetHeight = 1280;
         private bool isFullScreen = false;
+
+        void Start()
+        {
+            SetResolution(targetWidth, targetHeight, false);
+        }
 
         void Update()
         {
@@ -70,6 +77,11 @@ namespace Utility
                 Screen.fullScreenMode = FullScreenMode.Windowed;
                 Screen.fullScreen = false;
             }
+        }
+
+        private void SetResolution(int width, int height, bool fullscreen)
+        {
+            Screen.SetResolution(width, height, fullscreen);
         }
     }
 }
