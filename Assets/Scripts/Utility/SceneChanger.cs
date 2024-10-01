@@ -8,6 +8,22 @@ namespace Utility
         [SerializeField] private string firstSceneName;
         [SerializeField] private string secondSceneName;
 
+        private bool isFullScreen = false;
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ExitGame();
+            }
+
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
+                ToggleFullScreen();
+            }
+        }
+
+
         public void LoadFirstScene()
         {
             if (!string.IsNullOrEmpty(firstSceneName))
@@ -29,6 +45,30 @@ namespace Utility
             else
             {
                 Debug.LogWarning("Second scene name is not assigned.");
+            }
+        }
+
+        private void ExitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
+        private void ToggleFullScreen()
+        {
+            isFullScreen = !isFullScreen;
+            if (isFullScreen)
+            {
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+                Screen.fullScreen = true;
+            }
+            else
+            {
+                Screen.fullScreenMode = FullScreenMode.Windowed;
+                Screen.fullScreen = false;
             }
         }
     }
