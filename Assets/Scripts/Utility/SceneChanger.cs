@@ -5,27 +5,12 @@ namespace Utility
 {
     public class SceneChanger : MonoBehaviour
     {
-        public static SceneChanger Instance { get; private set; }
-
         [SerializeField] private string firstSceneName;
         [SerializeField] private string secondSceneName;
         [SerializeField] private string thirdSceneName;
 
         private readonly int targetWidth = 800;
         private readonly int targetHeight = 1280;
-
-        void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
 
         void Start()
         {

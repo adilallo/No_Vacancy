@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private float fadeDuration = 2f;
     private List<AudioClip> currentPlaylist = new List<AudioClip>();
     private int currentTrackIndex = 0;
-    private Coroutine fadeCoroutine;
     private Coroutine playlistCoroutine;
+
+    public event Action OnPlaylistFinished;
 
     void Awake()
     {
@@ -48,7 +50,14 @@ public class AudioManager : MonoBehaviour
 
             yield return new WaitForSeconds(currentTrack.length);
 
-            currentTrackIndex = (currentTrackIndex + 1) % currentPlaylist.Count;
+            currentTrackIndex++;
+
+            if (currentTrackIndex >= currentPlaylist.Count)
+            {
+                yield return StartCoroutine(FadeOutLastTrack());
+                OnPlaylistFinished?.Invoke();
+                yield break;
+            }
         }
     }
 
@@ -72,5 +81,19 @@ public class AudioManager : MonoBehaviour
         }
 
         audioSource.volume = startVolume;
+    }
+
+    private IEnumerator FadeOutLastTrack()
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / fadeDuration;
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = 1;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class EndSceneManager : MonoBehaviour
 {
@@ -20,19 +21,30 @@ public class EndSceneManager : MonoBehaviour
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayPlaylist(endSceneAudioClips);
+            AudioManager.Instance.OnPlaylistFinished += LoadFirstScene;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.OnPlaylistFinished -= LoadFirstScene;  // Unsubscribe to prevent memory leaks
         }
     }
 
     private void DisplayLeaderboard()
     {
-        List<VideoClip> videoClips = MiddleSceneManager.Instance.GetVideoClips();
+        Dictionary<int, int> videoSelections = LeaderboardManager.Instance.GetAllVideoSelections();
+        List<VideoClip> videoClips = LeaderboardManager.Instance.GetVideoClips();  // Get the video clips from the LeaderboardManager
 
         List<KeyValuePair<int, int>> videoSelectionList = new List<KeyValuePair<int, int>>();
 
-        for (int i = 0; i < videoClips.Count; i++)
+        foreach (var entry in videoSelections)
         {
-            int selectionCount = MiddleSceneManager.videoSelections.ContainsKey(i) ? MiddleSceneManager.videoSelections[i] : 0;
-            videoSelectionList.Add(new KeyValuePair<int, int>(i, selectionCount));
+            int videoIndex = entry.Key;
+            int selectionCount = entry.Value;
+            videoSelectionList.Add(new KeyValuePair<int, int>(videoIndex, selectionCount));
         }
 
         videoSelectionList.Sort((x, y) => y.Value.CompareTo(x.Value));
@@ -45,5 +57,10 @@ public class EndSceneManager : MonoBehaviour
 
             leaderboardText.text += (i + 1) + ". " + videoName + " " + selectionCount + "\n";
         }
+    }
+
+    private void LoadFirstScene()
+    {
+        SceneManager.LoadScene("Start");
     }
 }

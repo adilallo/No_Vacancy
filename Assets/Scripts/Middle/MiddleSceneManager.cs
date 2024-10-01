@@ -7,46 +7,35 @@ public class MiddleSceneManager : MonoBehaviour
 {
     [HeaderAttribute("UI")]
     [SerializeField] private VideoPlayer npcVideoPlayer;
+    [SerializeField] private GameObject npcRawImage;
     [SerializeField] private VideoPlayer arrowVideoPlayer;
+    [SerializeField] private GameObject arrowLeftRawImage;
+    [SerializeField] private GameObject arrowRightRawImage;
     [SerializeField] private List<VideoClip> videoClips;
 
     [HeaderAttribute("Audio")]
     [SerializeField] private List<AudioClip> middleSceneAudioClips;
 
-    public static Dictionary<int, int> videoSelections = new Dictionary<int, int>();
-    public static MiddleSceneManager Instance { get; private set; }
-
     private int currentVideoIndex = 0;
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     void Start()
     {
-        arrowVideoPlayer.Prepare();
-        npcVideoPlayer.Prepare();
+        npcRawImage.SetActive(false);
+        arrowLeftRawImage.SetActive(false);
+        arrowRightRawImage.SetActive(false);
 
-        for (int i = 0; i < videoClips.Count; i++)
-        {
-            if (!videoSelections.ContainsKey(i))
-            {
-                videoSelections[i] = 0; 
-            }
-        }
+        npcVideoPlayer.prepareCompleted += OnVideosPrepared;
+        arrowVideoPlayer.prepareCompleted += OnVideosPrepared;
+
+        currentVideoIndex = 0;
+
+        npcVideoPlayer.Prepare();
+        arrowVideoPlayer.Prepare();
 
         if (videoClips.Count > 0)
         {
             PlayVideo(currentVideoIndex);
+            LeaderboardManager.Instance.SetVideoClips(videoClips);  // Pass the video clips to the LeaderboardManager
         }
         else
         {
@@ -59,9 +48,10 @@ public class MiddleSceneManager : MonoBehaviour
         }
     }
 
-    public List<VideoClip> GetVideoClips()
+    private void OnDisable()
     {
-        return videoClips; 
+        npcVideoPlayer.prepareCompleted -= OnVideosPrepared;
+        arrowVideoPlayer.prepareCompleted -= OnVideosPrepared;
     }
 
     public void NextVideo()
@@ -76,18 +66,10 @@ public class MiddleSceneManager : MonoBehaviour
         PlayVideo(currentVideoIndex);
     }
 
+    // Method to handle video selection
     public void OnVideoSelected()
     {
-        if (videoSelections.ContainsKey(currentVideoIndex))
-        {
-            videoSelections[currentVideoIndex]++;
-        }
-        else
-        {
-            videoSelections[currentVideoIndex] = 1;
-        }
-
-        Debug.Log("Video " + currentVideoIndex + " was selected. Total selections: " + videoSelections[currentVideoIndex]);
+        LeaderboardManager.Instance.RecordVideoSelection(currentVideoIndex);  // Use the LeaderboardManager to track selection
     }
 
     private void PlayVideo(int index)
@@ -97,5 +79,12 @@ public class MiddleSceneManager : MonoBehaviour
             npcVideoPlayer.clip = videoClips[index];
             npcVideoPlayer.Play();
         }
+    }
+
+    private void OnVideosPrepared(VideoPlayer vp)
+    {
+        npcRawImage.SetActive(true);
+        arrowLeftRawImage.SetActive(true);
+        arrowRightRawImage.SetActive(true);
     }
 }
