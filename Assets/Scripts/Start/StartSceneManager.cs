@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 namespace StartScene
@@ -9,8 +9,8 @@ namespace StartScene
     public class StartSceneManager : MonoBehaviour
     {
         [HeaderAttribute("Intro Assets")]
+        [SerializeField] private RawImage introVideo;
         [SerializeField] private GameObject introImage;
-        [SerializeField] private GameObject introVideo;
         [SerializeField] private VideoPlayer introVideoPlayer;
 
         [HeaderAttribute("UI")]
@@ -27,13 +27,12 @@ namespace StartScene
         {
             introImage.SetActive(true);
             introVideoPlayer.Prepare();
-            introVideo.SetActive(false);
-
             stockVideoPlayer.Prepare();
             avatarVideoPlayer.Prepare();
-            UI.SetActive(false);
 
-            UnityEngine.Cursor.visible = false;
+            UI.SetActive(false);
+            
+            Cursor.visible = false;
 
             introVideoPlayer.loopPointReached += OnVideoFinished;
 
@@ -68,14 +67,13 @@ namespace StartScene
             }
 
             introImage.SetActive(false);
-            introVideo.SetActive(true);
-
             introVideoPlayer.Play();
         }
 
         private void OnVideoFinished(VideoPlayer vp)
         {
-            UnityEngine.Cursor.visible = true;
+            introVideoPlayer.time = 0;
+            Cursor.visible = true;
 
             avatarVideoPlayer.Play();
             stockVideoPlayer.Play();  

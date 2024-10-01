@@ -307,7 +307,7 @@ VideoPlayer:
   m_PlayOnAwake: 1
   m_SkipOnDrop: 0
   m_Looping: 1
-  m_WaitForFirstFrame: 1
+  m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
 --- !u!4 &280538093
@@ -747,8 +747,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
-  m_Antialiasing: 1
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1015,7 +1015,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1740468807}
+      - m_Target: {fileID: 1523213508}
         m_TargetAssemblyTypeName: Utility.SceneChanger, Assembly-CSharp
         m_MethodName: LoadThirdScene
         m_Mode: 1
@@ -1095,6 +1095,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec415c0f41a6b4e5fb62d5167b2c5185, type: 3}
+--- !u!1 &1523213507
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1523213509}
+  - component: {fileID: 1523213508}
+  m_Layer: 0
+  m_Name: Scene Change
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1523213508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523213507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20cd948ed013ff343ba0741e7f45b8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstSceneName: Start
+  secondSceneName: Middle
+  thirdSceneName: End
+--- !u!4 &1523213509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523213507}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 252.90642, y: 580.49524, z: -67.447136}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1740468806
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,7 +1152,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1740468809}
   - component: {fileID: 1740468808}
-  - component: {fileID: 1740468807}
   - component: {fileID: 1740468810}
   m_Layer: 0
   m_Name: Scripts
@@ -1114,21 +1160,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1740468807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1740468806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20cd948ed013ff343ba0741e7f45b8ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firstSceneName: Start
-  secondSceneName: Middle
-  thirdSceneName: End
 --- !u!114 &1740468808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1141,8 +1172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4ab22af4636b044873d334c3a4e25c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 2118144298}
-  renderTextureUI: {fileID: 880178273}
+  npcVideoPlayer: {fileID: 2118144298}
+  arrowVideoPlayer: {fileID: 280538092}
   videoClips:
   - {fileID: 32900000, guid: 126a02da6a1d240e6ab418cb22dd82a6, type: 3}
   - {fileID: 32900000, guid: 8eca394794a1a49d7a116d5cc1700fd8, type: 3}
@@ -1338,7 +1369,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118144297}
   m_Enabled: 1
-  m_VideoClip: {fileID: 0}
+  m_VideoClip: {fileID: 32900000, guid: 126a02da6a1d240e6ab418cb22dd82a6, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -1363,7 +1394,7 @@ VideoPlayer:
   m_PlayOnAwake: 0
   m_SkipOnDrop: 0
   m_Looping: 1
-  m_WaitForFirstFrame: 1
+  m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
 --- !u!4 &2118144299
@@ -1430,4 +1461,5 @@ SceneRoots:
   - {fileID: 214183867}
   - {fileID: 54839014}
   - {fileID: 1740468809}
+  - {fileID: 1523213509}
   - {fileID: 1422243621}

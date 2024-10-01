@@ -5,6 +5,8 @@ namespace Utility
 {
     public class SceneChanger : MonoBehaviour
     {
+        public static SceneChanger Instance { get; private set; }
+
         [SerializeField] private string firstSceneName;
         [SerializeField] private string secondSceneName;
         [SerializeField] private string thirdSceneName;
@@ -12,10 +14,25 @@ namespace Utility
         private readonly int targetWidth = 800;
         private readonly int targetHeight = 1280;
 
+        void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
         void Start()
         {
-            Screen.fullScreenMode = FullScreenMode.Windowed;
-            SetResolution(targetWidth, targetHeight, false);
+            if (Screen.width != targetWidth || Screen.height != targetHeight || !Screen.fullScreen)
+            {
+                SetResolution(targetWidth, targetHeight, false);
+            }
         }
 
         void Update()
@@ -30,7 +47,7 @@ namespace Utility
         {
             if (!string.IsNullOrEmpty(firstSceneName))
             {
-                SceneManager.LoadScene(firstSceneName); 
+                SceneManager.LoadScene(firstSceneName);
             }
             else
             {
@@ -42,7 +59,7 @@ namespace Utility
         {
             if (!string.IsNullOrEmpty(secondSceneName))
             {
-                SceneManager.LoadScene(secondSceneName); 
+                SceneManager.LoadScene(secondSceneName);
             }
             else
             {
@@ -58,7 +75,7 @@ namespace Utility
             }
             else
             {
-                Debug.LogWarning("Third scene name is not assigned. ");
+                Debug.LogWarning("Third scene name is not assigned.");
             }
         }
 

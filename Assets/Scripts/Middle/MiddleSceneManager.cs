@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class MiddleSceneManager : MonoBehaviour
 {
     [HeaderAttribute("UI")]
-    [SerializeField] private VideoPlayer videoPlayer;
-    [SerializeField] private RawImage renderTextureUI;
+    [SerializeField] private VideoPlayer npcVideoPlayer;
+    [SerializeField] private VideoPlayer arrowVideoPlayer;
     [SerializeField] private List<VideoClip> videoClips;
 
     [HeaderAttribute("Audio")]
@@ -33,6 +33,9 @@ public class MiddleSceneManager : MonoBehaviour
 
     void Start()
     {
+        arrowVideoPlayer.Prepare();
+        npcVideoPlayer.Prepare();
+
         for (int i = 0; i < videoClips.Count; i++)
         {
             if (!videoSelections.ContainsKey(i))
@@ -91,8 +94,8 @@ public class MiddleSceneManager : MonoBehaviour
     {
         if (videoClips.Count > 0 && videoClips[index] != null)
         {
-            videoPlayer.clip = videoClips[index];
-            videoPlayer.Play();
+            npcVideoPlayer.clip = videoClips[index];
+            npcVideoPlayer.Play();
         }
     }
 }
