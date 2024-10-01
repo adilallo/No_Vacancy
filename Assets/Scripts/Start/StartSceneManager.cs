@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Video;
@@ -16,8 +17,10 @@ namespace StartScene
         [SerializeField] private GameObject UI;
         [SerializeField] private VideoPlayer stockVideoPlayer;
         [SerializeField] private VideoPlayer avatarVideoPlayer;
-        [SerializeField] private GameObject playButton;
-        
+
+        [HeaderAttribute("Audio")]
+        [SerializeField] private List<AudioClip> startSceneAudioClips;
+
         private bool mouseMoved = false;
 
         void Start()
@@ -33,6 +36,11 @@ namespace StartScene
             UnityEngine.Cursor.visible = false;
 
             introVideoPlayer.loopPointReached += OnVideoFinished;
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayPlaylist(startSceneAudioClips);
+            }
         }
 
         private void OnDisable()
@@ -49,11 +57,6 @@ namespace StartScene
                     mouseMoved = true;
                     StartCoroutine(PlayVideoWhenReady());
                 }
-            }
-
-            if (UI.activeSelf)
-            {
-                playButton.transform.Rotate(0, (float)(24 * Time.deltaTime), 0);
             }
         }
 

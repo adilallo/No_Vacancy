@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class MiddleSceneManager : MonoBehaviour
 {
+    [HeaderAttribute("UI")]
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private RawImage renderTextureUI;
     [SerializeField] private List<VideoClip> videoClips;
+
+    [HeaderAttribute("Audio")]
+    [SerializeField] private List<AudioClip> middleSceneAudioClips;
 
     public static Dictionary<int, int> videoSelections = new Dictionary<int, int>();
     public static MiddleSceneManager Instance { get; private set; }
@@ -44,6 +48,11 @@ public class MiddleSceneManager : MonoBehaviour
         else
         {
             Debug.LogWarning("No video clips assigned in the videoClips list.");
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayPlaylist(middleSceneAudioClips);
         }
     }
 
