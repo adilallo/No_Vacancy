@@ -1236,6 +1236,7 @@ MonoBehaviour:
   arrowRightRawImage: {fileID: 1963578883}
   videoClips:
   - {fileID: 32900000, guid: 126a02da6a1d240e6ab418cb22dd82a6, type: 3}
+  - {fileID: 32900000, guid: b782ae5d4dff94ec7b7b383ef77e9d04, type: 3}
   - {fileID: 32900000, guid: 8eca394794a1a49d7a116d5cc1700fd8, type: 3}
   - {fileID: 32900000, guid: fb22a3bf85fc94e59bfb4d7a220bd8db, type: 3}
   - {fileID: 32900000, guid: 1e2b1fb759f544c77b1711b8f08934c2, type: 3}
@@ -1243,6 +1244,8 @@ MonoBehaviour:
   - {fileID: 32900000, guid: f2581e2887680418396523c09db3a6d2, type: 3}
   - {fileID: 32900000, guid: 7c2bfcadd07e341c78717a1075a6223c, type: 3}
   - {fileID: 32900000, guid: 6c8f4a527eb8e43de874bd91ac1c7170, type: 3}
+  - {fileID: 32900000, guid: 41691a4f1ebc34faab089d3561d1cb4c, type: 3}
+  - {fileID: 32900000, guid: 653ba7176b8d245539528fb64fab12b9, type: 3}
   middleSceneAudioClips:
   - {fileID: 8300000, guid: 889dbd5990f714171ae932a8719df50b, type: 3}
   - {fileID: 8300000, guid: cb1529f9255584a89b1dcea33e81b8a8, type: 3}

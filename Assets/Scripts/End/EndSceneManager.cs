@@ -29,14 +29,14 @@ public class EndSceneManager : MonoBehaviour
     {
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.OnPlaylistFinished -= LoadFirstScene;  // Unsubscribe to prevent memory leaks
+            AudioManager.Instance.OnPlaylistFinished -= LoadFirstScene;
         }
     }
 
     private void DisplayLeaderboard()
     {
         Dictionary<int, int> videoSelections = LeaderboardManager.Instance.GetAllVideoSelections();
-        List<VideoClip> videoClips = LeaderboardManager.Instance.GetVideoClips();  // Get the video clips from the LeaderboardManager
+        List<VideoClip> videoClips = LeaderboardManager.Instance.GetVideoClips();
 
         List<KeyValuePair<int, int>> videoSelectionList = new List<KeyValuePair<int, int>>();
 
@@ -55,7 +55,7 @@ public class EndSceneManager : MonoBehaviour
             string videoName = videoClips[videoIndex].name;
             int selectionCount = videoSelectionList[i].Value;
 
-            leaderboardText.text += (i + 1) + ". " + videoName + " " + selectionCount + "\n";
+            leaderboardText.text += videoName + " " + selectionCount + "\n";
         }
     }
 

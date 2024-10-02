@@ -162,6 +162,9 @@ MonoBehaviour:
   - {fileID: 8353412086202436871, guid: 326c8281fb8b74df4ac48846a032990a, type: 3}
   - {fileID: 4712600445175409842, guid: 2645979f229e54f98817e36f5df9fdd6, type: 3}
   - {fileID: 4885486871096227200, guid: fcf01120827fd44279f76737709fd97d, type: 3}
+  - {fileID: 6499929168635528300, guid: a51deebedcb214e27853c4c1c2121b90, type: 3}
+  - {fileID: 6985074348126498792, guid: cde867feb6c974791b23181b4f09a532, type: 3}
+  - {fileID: 2109688841053343063, guid: 9c9e80de6150f406cb6e1b946e1c14b2, type: 3}
   spread: 15
   amount: 50
   cam_rig: {fileID: 1461344151}

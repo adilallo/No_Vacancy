@@ -35,7 +35,7 @@ public class MiddleSceneManager : MonoBehaviour
         if (videoClips.Count > 0)
         {
             PlayVideo(currentVideoIndex);
-            LeaderboardManager.Instance.SetVideoClips(videoClips);  // Pass the video clips to the LeaderboardManager
+            LeaderboardManager.Instance.SetVideoClips(videoClips);
         }
         else
         {
@@ -66,7 +66,6 @@ public class MiddleSceneManager : MonoBehaviour
         PlayVideo(currentVideoIndex);
     }
 
-    // Method to handle video selection
     public void OnVideoSelected()
     {
         LeaderboardManager.Instance.RecordVideoSelection(currentVideoIndex);  // Use the LeaderboardManager to track selection
