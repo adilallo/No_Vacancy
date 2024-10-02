@@ -9,14 +9,14 @@ namespace Utility
         [SerializeField] private string secondSceneName;
         [SerializeField] private string thirdSceneName;
 
-        private readonly int targetWidth = 800;
-        private readonly int targetHeight = 1280;
+        private readonly int targetWidth = 1280;
+        private readonly int targetHeight = 800;
 
         void Start()
         {
             if (Screen.width != targetWidth || Screen.height != targetHeight || !Screen.fullScreen)
             {
-                SetResolution(targetWidth, targetHeight, false);
+                SetResolution(targetWidth, targetHeight, true);
             }
         }
 
@@ -75,6 +75,7 @@ namespace Utility
 
         private void SetResolution(int width, int height, bool fullscreen)
         {
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
             Screen.SetResolution(width, height, fullscreen);
         }
     }
