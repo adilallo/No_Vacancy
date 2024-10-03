@@ -14,7 +14,9 @@ public class MiddleSceneManager : MonoBehaviour
     [SerializeField] private List<VideoClip> videoClips;
 
     [HeaderAttribute("Audio")]
+    [SerializeField] private List<AudioClip> npcAudioClips;
     [SerializeField] private List<AudioClip> middleSceneAudioClips;
+    [SerializeField] private AudioSource audioSource;
 
     private int currentVideoIndex = 0;
 
@@ -29,12 +31,12 @@ public class MiddleSceneManager : MonoBehaviour
 
         currentVideoIndex = 0;
 
-        npcVideoPlayer.Prepare();
+
         arrowVideoPlayer.Prepare();
 
         if (videoClips.Count > 0)
         {
-            PlayVideo(currentVideoIndex);
+            PlayVideoAndAudio(currentVideoIndex);
             LeaderboardManager.Instance.SetVideoClips(videoClips);
         }
         else
@@ -57,26 +59,36 @@ public class MiddleSceneManager : MonoBehaviour
     public void NextVideo()
     {
         currentVideoIndex = (currentVideoIndex + 1) % videoClips.Count;
-        PlayVideo(currentVideoIndex);
+        PlayVideoAndAudio(currentVideoIndex);
     }
 
     public void PreviousVideo()
     {
         currentVideoIndex = (currentVideoIndex - 1 + videoClips.Count) % videoClips.Count;
-        PlayVideo(currentVideoIndex);
+        PlayVideoAndAudio(currentVideoIndex);
     }
 
     public void OnVideoSelected()
     {
-        LeaderboardManager.Instance.RecordVideoSelection(currentVideoIndex);  // Use the LeaderboardManager to track selection
+        LeaderboardManager.Instance.RecordVideoSelection(currentVideoIndex);
     }
 
-    private void PlayVideo(int index)
+    private void PlayVideoAndAudio(int index)
     {
         if (videoClips.Count > 0 && videoClips[index] != null)
         {
             npcVideoPlayer.clip = videoClips[index];
             npcVideoPlayer.Play();
+        }
+
+        if (npcAudioClips.Count > index && npcAudioClips[index] != null)
+        {
+            audioSource.clip = npcAudioClips[index];
+            audioSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No audio clip assigned for video at index " + index);
         }
     }
 
