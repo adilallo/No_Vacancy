@@ -22,6 +22,8 @@ public class MiddleSceneManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
+
         npcRawImage.SetActive(false);
         arrowLeftRawImage.SetActive(false);
         arrowRightRawImage.SetActive(false);

@@ -9,8 +9,8 @@ namespace Utility
         [SerializeField] private string secondSceneName;
         [SerializeField] private string thirdSceneName;
 
-        private readonly int targetWidth = 1280;
-        private readonly int targetHeight = 800;
+        private readonly int targetWidth = 800;
+        private readonly int targetHeight = 1280;
 
         void Start()
         {
