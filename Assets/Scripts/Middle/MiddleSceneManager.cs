@@ -1,34 +1,40 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
-using System.Collections;
 
 public class MiddleSceneManager : MonoBehaviour
 {
     [SerializeField] private CanvasGroup uiCanvasGroup;
     [SerializeField] private float fadeDuration = 2f;
 
-    [HeaderAttribute("UI")]
+    [Header("UI")]
     [SerializeField] private VideoPlayer npcVideoPlayer;
-    [SerializeField] private GameObject npcRawImage;
+    [SerializeField] private VideoPlayer avatarVideoPlayer;
+    [SerializeField] private RectTransform npcRawImage;
+    [SerializeField] private RectTransform avatarRawImage;
     [SerializeField] private VideoPlayer arrowVideoPlayer;
     [SerializeField] private GameObject arrowLeftRawImage;
     [SerializeField] private GameObject arrowRightRawImage;
-    [SerializeField] private List<VideoClip> videoClips;
+    [SerializeField] private List<VideoClip> npcVideoClips;
+    [SerializeField] private List<VideoClip> avatarVideoClips;
+    [SerializeField] private Canvas canvas;
 
-    [HeaderAttribute("Audio")]
-    [SerializeField] private List<AudioClip> npcAudioClips;
+    [Header("Audio")]
     [SerializeField] private List<AudioClip> middleSceneAudioClips;
     [SerializeField] private AudioSource audioSource;
 
     private int currentVideoIndex = 0;
+    private Vector2 avatarVelocity = new Vector2(100f, 100f);
+    private RectTransform canvasRectTransform;  
 
     void Start()
     {
         Cursor.visible = false;
 
-        npcRawImage.SetActive(false);
+        npcRawImage.gameObject.SetActive(false);
+        avatarRawImage.gameObject.SetActive(false);
         arrowLeftRawImage.SetActive(false);
         arrowRightRawImage.SetActive(false);
 
@@ -38,28 +44,46 @@ public class MiddleSceneManager : MonoBehaviour
             StartCoroutine(FadeInUI());
         }
 
-        npcVideoPlayer.prepareCompleted += OnVideosPrepared;
-        arrowVideoPlayer.prepareCompleted += OnVideosPrepared;
-
         currentVideoIndex = 0;
 
+        npcVideoPlayer.Prepare();
+        npcVideoPlayer.prepareCompleted += OnVideosPrepared;
 
-        arrowVideoPlayer.Prepare();
-
-        if (videoClips.Count > 0)
+        if (npcVideoClips.Count > 0)
         {
             PlayVideoAndAudio(currentVideoIndex);
-            LeaderboardManager.Instance.SetVideoClips(videoClips);
+            LeaderboardManager.Instance.SetVideoClips(npcVideoClips);
         }
         else
         {
-            Debug.LogWarning("No video clips assigned in the videoClips list.");
+            Debug.LogWarning("No video clips assigned in the npcVideoClips list.");
         }
 
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayPlaylist(middleSceneAudioClips, false);
         }
+
+        // Assign the Canvas RectTransform
+        if (canvas != null)
+        {
+            canvasRectTransform = canvas.GetComponent<RectTransform>();
+        }
+        else
+        {
+            Debug.LogError("Canvas is not assigned! Please assign a Canvas in the Inspector.");
+        }
+
+        // Check if avatarRawImage is assigned properly
+        if (avatarRawImage == null)
+        {
+            Debug.LogError("avatarRawImage is not assigned! Please check the Inspector.");
+        }
+    }
+
+    void Update()
+    {
+        MoveAvatarRawImage();  // Move the avatar every frame
     }
 
     private void OnDisable()
@@ -70,13 +94,13 @@ public class MiddleSceneManager : MonoBehaviour
 
     public void NextVideo()
     {
-        currentVideoIndex = (currentVideoIndex + 1) % videoClips.Count;
+        currentVideoIndex = (currentVideoIndex + 1) % npcVideoClips.Count;
         PlayVideoAndAudio(currentVideoIndex);
     }
 
     public void PreviousVideo()
     {
-        currentVideoIndex = (currentVideoIndex - 1 + videoClips.Count) % videoClips.Count;
+        currentVideoIndex = (currentVideoIndex - 1 + npcVideoClips.Count) % npcVideoClips.Count;
         PlayVideoAndAudio(currentVideoIndex);
     }
 
@@ -87,16 +111,16 @@ public class MiddleSceneManager : MonoBehaviour
 
     private void PlayVideoAndAudio(int index)
     {
-        if (videoClips.Count > 0 && videoClips[index] != null)
+        if (npcVideoClips.Count > 0 && npcVideoClips[index] != null)
         {
-            npcVideoPlayer.clip = videoClips[index];
+            npcVideoPlayer.clip = npcVideoClips[index];
             npcVideoPlayer.Play();
         }
 
-        if (npcAudioClips.Count > index && npcAudioClips[index] != null)
+        if (avatarVideoClips.Count > index && avatarVideoClips[index] != null)
         {
-            audioSource.clip = npcAudioClips[index];
-            audioSource.Play();
+            avatarVideoPlayer.clip = avatarVideoClips[index];
+            avatarVideoPlayer.Play();
         }
         else
         {
@@ -106,7 +130,8 @@ public class MiddleSceneManager : MonoBehaviour
 
     private void OnVideosPrepared(VideoPlayer vp)
     {
-        npcRawImage.SetActive(true);
+        avatarRawImage.gameObject.SetActive(true);
+        npcRawImage.gameObject.SetActive(true);
         arrowLeftRawImage.SetActive(true);
         arrowRightRawImage.SetActive(true);
     }
@@ -122,5 +147,62 @@ public class MiddleSceneManager : MonoBehaviour
         }
 
         uiCanvasGroup.alpha = 1;
+    }
+
+    private void MoveAvatarRawImage()
+    {
+        // Ensure both avatarRawImage and canvasRectTransform are not null
+        if (avatarRawImage == null || canvasRectTransform == null)
+        {
+            Debug.LogError("Either avatarRawImage or canvasRectTransform is null. Movement cannot proceed.");
+            return;
+        }
+
+        // Get the current position of the avatar
+        Vector2 currentPosition = avatarRawImage.anchoredPosition;
+
+        // Update the position based on the velocity
+        currentPosition += avatarVelocity * Time.deltaTime;
+
+        // Get the size of the canvas
+        float canvasWidth = canvasRectTransform.rect.width;
+        float canvasHeight = canvasRectTransform.rect.height;
+
+        // Get the size of the avatar
+        float avatarWidth = avatarRawImage.rect.width;
+        float avatarHeight = avatarRawImage.rect.height;
+
+        float yOffset = canvasHeight * 0.07f;  // Adjust this value as needed to push everything up
+
+        float minX = -canvasWidth / 2 + avatarWidth / 2;
+        float maxX = canvasWidth / 2 - avatarWidth / 2;
+        float minY = (-canvasHeight / 2 + avatarHeight / 2) + yOffset;
+        float maxY = (canvasHeight / 2 - avatarHeight / 2) + yOffset;
+
+        // Check and reverse direction if hitting horizontal edges
+        if (currentPosition.x < minX)
+        {
+            currentPosition.x = minX;
+            avatarVelocity.x = Mathf.Abs(avatarVelocity.x);  // Move right
+        }
+        else if (currentPosition.x > maxX)
+        {
+            currentPosition.x = maxX;
+            avatarVelocity.x = -Mathf.Abs(avatarVelocity.x);  // Move left
+        }
+
+        // Check and reverse direction if hitting vertical edges
+        if (currentPosition.y < minY)
+        {
+            currentPosition.y = minY;
+            avatarVelocity.y = Mathf.Abs(avatarVelocity.y);  // Move up
+        }
+        else if (currentPosition.y > maxY)
+        {
+            currentPosition.y = maxY;
+            avatarVelocity.y = -Mathf.Abs(avatarVelocity.y);  // Move down
+        }
+
+        avatarRawImage.anchoredPosition = currentPosition;
     }
 }

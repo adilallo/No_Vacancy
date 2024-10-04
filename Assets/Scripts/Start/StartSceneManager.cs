@@ -8,6 +8,9 @@ namespace StartScene
 {
     public class StartSceneManager : MonoBehaviour
     {
+        [SerializeField] private CanvasGroup uiCanvasGroup;
+        [SerializeField] private float fadeDuration = 2f;
+
         [HeaderAttribute("Intro Assets")]
         [SerializeField] private RawImage introVideo;
         [SerializeField] private GameObject introImage;
@@ -29,6 +32,11 @@ namespace StartScene
             introVideoPlayer.Prepare();
             stockVideoPlayer.Prepare();
             avatarVideoPlayer.Prepare();
+
+            if (uiCanvasGroup != null)
+            {
+                uiCanvasGroup.alpha = 0;
+            }
 
             UI.SetActive(false);
             
@@ -59,7 +67,7 @@ namespace StartScene
             }
         }
 
-            private IEnumerator PlayVideoWhenReady()
+        private IEnumerator PlayVideoWhenReady()
         {
             while (!introVideoPlayer.isPrepared)
             {
@@ -70,10 +78,23 @@ namespace StartScene
             introVideoPlayer.Play();
         }
 
+        private IEnumerator FadeInUI()
+        {
+            float elapsedTime = 0f;
+            while (elapsedTime < fadeDuration)
+            {
+                uiCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            uiCanvasGroup.alpha = 1;
+        }
+
         private void OnVideoFinished(VideoPlayer vp)
         {
             introVideoPlayer.time = 0;
-
+            StartCoroutine(FadeInUI());
             avatarVideoPlayer.Play();
             stockVideoPlayer.Play();  
             UI.SetActive(true);
