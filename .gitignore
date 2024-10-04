@@ -71,6 +71,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-# Avatar Video Files
-/[Aa]assets/[Aa]rt/[Vv]ideo/[Aa]vatar.meta
-/[Aa]assets/[Aa]rt/[Vv]ideo/[Aa]vatar
+# Ignore the entire Avatar video files folder and its contents
+/Assets/Art/Video/Avatar/
+/Assets/Art/Video/Avatar.meta
