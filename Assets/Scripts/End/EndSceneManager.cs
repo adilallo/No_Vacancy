@@ -3,9 +3,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class EndSceneManager : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup uiCanvasGroup;
+    [SerializeField] private float fadeDuration = 2f;
+
     [HeaderAttribute("UI")]
     [SerializeField] private TMP_Text leaderboardText;
 
@@ -17,6 +21,12 @@ public class EndSceneManager : MonoBehaviour
         leaderboardText.text = "";
 
         DisplayLeaderboard();
+
+        if (uiCanvasGroup != null)
+        {
+            uiCanvasGroup.alpha = 0;
+            StartCoroutine(FadeInUI());
+        }
 
         if (AudioManager.Instance != null)
         {
@@ -35,8 +45,20 @@ public class EndSceneManager : MonoBehaviour
 
     private void DisplayLeaderboard()
     {
+        if (LeaderboardManager.Instance == null)
+        {
+            Debug.LogWarning("LeaderboardManager instance is missing.");
+            return;
+        }
+
         Dictionary<int, int> videoSelections = LeaderboardManager.Instance.GetAllVideoSelections();
         List<VideoClip> videoClips = LeaderboardManager.Instance.GetVideoClips();
+
+        if (videoSelections == null || videoClips == null)
+        {
+            Debug.LogWarning("Leaderboard data is missing. Cannot display the leaderboard.");
+            return;
+        }
 
         List<KeyValuePair<int, int>> videoSelectionList = new List<KeyValuePair<int, int>>();
 
@@ -62,5 +84,18 @@ public class EndSceneManager : MonoBehaviour
     private void LoadFirstScene()
     {
         SceneManager.LoadScene("Start");
+    }
+
+    private IEnumerator FadeInUI()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            uiCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        uiCanvasGroup.alpha = 1;
     }
 }

@@ -23,7 +23,6 @@ public class MiddleSceneManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private List<AudioClip> middleSceneAudioClips;
-    [SerializeField] private AudioSource audioSource;
 
     private int currentVideoIndex = 0;
     private Vector2 avatarVelocity = new Vector2(100f, 100f);
