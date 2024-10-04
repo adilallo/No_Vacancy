@@ -21,7 +21,7 @@ namespace StartScene
         [HeaderAttribute("Audio")]
         [SerializeField] private List<AudioClip> startSceneAudioClips;
 
-        private bool mouseMoved = false;
+        private bool mouseClicked = false;
 
         void Start()
         {
@@ -38,7 +38,7 @@ namespace StartScene
 
             if (AudioManager.Instance != null)
             {
-                AudioManager.Instance.PlayPlaylist(startSceneAudioClips);
+                AudioManager.Instance.PlayPlaylist(startSceneAudioClips, false);
             }
         }
 
@@ -46,20 +46,20 @@ namespace StartScene
         {
             introVideoPlayer.loopPointReached -= OnVideoFinished;
         }
-        
+
         void Update()
         {
-            if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (!mouseMoved)
+                if (!mouseClicked)
                 {
-                    mouseMoved = true;
-                    StartCoroutine(PlayVideoWhenReady());
+                    mouseClicked = true;
+                    StartCoroutine(PlayVideoWhenReady()); 
                 }
             }
         }
 
-        private IEnumerator PlayVideoWhenReady()
+            private IEnumerator PlayVideoWhenReady()
         {
             while (!introVideoPlayer.isPrepared)
             {
@@ -73,7 +73,6 @@ namespace StartScene
         private void OnVideoFinished(VideoPlayer vp)
         {
             introVideoPlayer.time = 0;
-            Cursor.visible = true;
 
             avatarVideoPlayer.Play();
             stockVideoPlayer.Play();  

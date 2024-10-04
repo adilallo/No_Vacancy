@@ -20,7 +20,7 @@ public class EndSceneManager : MonoBehaviour
 
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayPlaylist(endSceneAudioClips);
+            AudioManager.Instance.PlayPlaylist(endSceneAudioClips, true);
             AudioManager.Instance.OnPlaylistFinished += LoadFirstScene;
         }
     }

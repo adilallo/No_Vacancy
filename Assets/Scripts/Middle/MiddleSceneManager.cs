@@ -2,9 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MiddleSceneManager : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup uiCanvasGroup;
+    [SerializeField] private float fadeDuration = 2f;
+
     [HeaderAttribute("UI")]
     [SerializeField] private VideoPlayer npcVideoPlayer;
     [SerializeField] private GameObject npcRawImage;
@@ -28,6 +32,12 @@ public class MiddleSceneManager : MonoBehaviour
         arrowLeftRawImage.SetActive(false);
         arrowRightRawImage.SetActive(false);
 
+        if (uiCanvasGroup != null)
+        {
+            uiCanvasGroup.alpha = 0;
+            StartCoroutine(FadeInUI());
+        }
+
         npcVideoPlayer.prepareCompleted += OnVideosPrepared;
         arrowVideoPlayer.prepareCompleted += OnVideosPrepared;
 
@@ -48,7 +58,7 @@ public class MiddleSceneManager : MonoBehaviour
 
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayPlaylist(middleSceneAudioClips);
+            AudioManager.Instance.PlayPlaylist(middleSceneAudioClips, false);
         }
     }
 
@@ -99,5 +109,18 @@ public class MiddleSceneManager : MonoBehaviour
         npcRawImage.SetActive(true);
         arrowLeftRawImage.SetActive(true);
         arrowRightRawImage.SetActive(true);
+    }
+
+    private IEnumerator FadeInUI()
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            uiCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        uiCanvasGroup.alpha = 1;
     }
 }

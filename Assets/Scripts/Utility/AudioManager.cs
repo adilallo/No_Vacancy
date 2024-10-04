@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     private List<AudioClip> currentPlaylist = new List<AudioClip>();
     private int currentTrackIndex = 0;
     private Coroutine playlistCoroutine;
+    private bool shouldFadeOutAtEnd = false;
 
     public event Action OnPlaylistFinished;
 
@@ -28,7 +29,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayPlaylist(List<AudioClip> playlist)
+    public void PlayPlaylist(List<AudioClip> playlist, bool fadeOutAtEnd = false)
     {
         if (playlistCoroutine != null)
         {
@@ -54,9 +55,16 @@ public class AudioManager : MonoBehaviour
 
             if (currentTrackIndex >= currentPlaylist.Count)
             {
-                yield return StartCoroutine(FadeOutLastTrack());
-                OnPlaylistFinished?.Invoke();
-                yield break;
+                if (shouldFadeOutAtEnd)
+                {
+                    yield return StartCoroutine(FadeOutLastTrack());
+                    OnPlaylistFinished?.Invoke();
+                    yield break;
+                }
+                else
+                {
+                    currentTrackIndex = 0;
+                }
             }
         }
     }

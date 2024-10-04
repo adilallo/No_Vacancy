@@ -3,13 +3,15 @@ using UnityEngine.UI;
 
 public class CustomCursor : MonoBehaviour
 {
-    [SerializeField] private Image cursorImage;
+    [SerializeField] private RawImage cursorImage;
     private bool mouseMoved = false;
 
     void Start()
     {
         Cursor.visible = false;
         cursorImage.enabled = false;
+
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
