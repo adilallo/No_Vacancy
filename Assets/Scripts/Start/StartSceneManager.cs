@@ -20,14 +20,19 @@ namespace StartScene
         [SerializeField] private GameObject UI;
         [SerializeField] private VideoPlayer stockVideoPlayer;
         [SerializeField] private VideoPlayer avatarVideoPlayer;
+        [SerializeField] private GameObject selectButton;
 
         [HeaderAttribute("Audio")]
         [SerializeField] private List<AudioClip> startSceneAudioClips;
 
         private bool mouseClicked = false;
+        private bool selectButtonVisible = false;
 
         void Start()
         {
+            mouseClicked = false;
+            selectButtonVisible = false;
+
             introImage.SetActive(true);
             introVideoPlayer.Prepare();
             stockVideoPlayer.Prepare();
@@ -39,7 +44,8 @@ namespace StartScene
             }
 
             UI.SetActive(false);
-            
+            selectButton.SetActive(false);
+
             Cursor.visible = false;
 
             introVideoPlayer.loopPointReached += OnVideoFinished;
@@ -64,6 +70,20 @@ namespace StartScene
                     mouseClicked = true;
                     StartCoroutine(PlayVideoWhenReady()); 
                 }
+            }
+
+            if (avatarVideoPlayer.isPlaying && !selectButtonVisible)
+            {
+                CheckAvatarVideoEnd();
+            }
+        }
+
+        private void CheckAvatarVideoEnd()
+        {
+            if (avatarVideoPlayer.time >= avatarVideoPlayer.length * 0.9f)
+            {
+                selectButton.SetActive(true);
+                selectButtonVisible = true;
             }
         }
 

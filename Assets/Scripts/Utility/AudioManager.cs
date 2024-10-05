@@ -38,6 +38,7 @@ public class AudioManager : MonoBehaviour
 
         currentPlaylist = playlist;
         currentTrackIndex = 0;
+        shouldFadeOutAtEnd = fadeOutAtEnd;
         playlistCoroutine = StartCoroutine(PlayAudioTracks());
     }
 

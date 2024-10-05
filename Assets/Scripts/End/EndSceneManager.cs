@@ -1,20 +1,24 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Video;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using UnityEngine.Video;
 
 public class EndSceneManager : MonoBehaviour
 {
     [SerializeField] private CanvasGroup uiCanvasGroup;
     [SerializeField] private float fadeDuration = 2f;
 
-    [HeaderAttribute("UI")]
+    [Header("UI")]
     [SerializeField] private TMP_Text leaderboardText;
 
-    [HeaderAttribute("Audio")]
+    [Header("Audio")]
     [SerializeField] private List<AudioClip> endSceneAudioClips;
+
+    [Header("Scrolling")]
+    [SerializeField] private float scrollSpeed = 50f;  // Speed at which the text scrolls
+    private RectTransform leaderboardRectTransform;
 
     void Start()
     {
@@ -33,6 +37,10 @@ public class EndSceneManager : MonoBehaviour
             AudioManager.Instance.PlayPlaylist(endSceneAudioClips, true);
             AudioManager.Instance.OnPlaylistFinished += LoadFirstScene;
         }
+
+        leaderboardRectTransform = leaderboardText.GetComponent<RectTransform>();
+
+        StartCoroutine(ScrollLeaderboardText());
     }
 
     void OnDisable()
@@ -77,7 +85,7 @@ public class EndSceneManager : MonoBehaviour
             string videoName = videoClips[videoIndex].name;
             int selectionCount = videoSelectionList[i].Value;
 
-            leaderboardText.text += videoName + " " + selectionCount + "\n";
+            leaderboardText.text += videoName + "\n" + selectionCount + "\n";
         }
     }
 
@@ -97,5 +105,24 @@ public class EndSceneManager : MonoBehaviour
         }
 
         uiCanvasGroup.alpha = 1;
+    }
+
+    private IEnumerator ScrollLeaderboardText()
+    {
+        float startY = leaderboardRectTransform.rect.height * -1;
+        float endY = leaderboardRectTransform.rect.height; 
+
+        leaderboardRectTransform.anchoredPosition = new Vector2(leaderboardRectTransform.anchoredPosition.x, startY);
+
+        while (true)
+        {
+            while (leaderboardRectTransform.anchoredPosition.y < endY)
+            {
+                leaderboardRectTransform.anchoredPosition += new Vector2(0, scrollSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+            leaderboardRectTransform.anchoredPosition = new Vector2(leaderboardRectTransform.anchoredPosition.x, startY);
+        }
     }
 }
