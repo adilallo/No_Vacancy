@@ -19,6 +19,8 @@ namespace StartScene
         [HeaderAttribute("UI")]
         [SerializeField] private GameObject UI;
         [SerializeField] private VideoPlayer stockVideoPlayer;
+        [SerializeField] private RawImage stockRawImage;
+        [SerializeField] private Image frameImage;
         [SerializeField] private VideoPlayer avatarVideoPlayer;
         [SerializeField] private GameObject selectButton;
 
@@ -27,11 +29,13 @@ namespace StartScene
 
         private bool mouseClicked = false;
         private bool selectButtonVisible = false;
+        private bool stockVideoStarted = false;
 
         void Start()
         {
             mouseClicked = false;
             selectButtonVisible = false;
+            stockVideoStarted = false;
 
             introImage.SetActive(true);
             introVideoPlayer.Prepare();
@@ -45,6 +49,8 @@ namespace StartScene
 
             UI.SetActive(false);
             selectButton.SetActive(false);
+            stockRawImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, 0f);
+            frameImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, 0f);
 
             Cursor.visible = false;
 
@@ -76,14 +82,28 @@ namespace StartScene
             {
                 CheckAvatarVideoEnd();
             }
+
+            if (avatarVideoPlayer.isPlaying && !stockVideoStarted)
+            {
+                CheckStartStockVideo();
+            }
         }
 
         private void CheckAvatarVideoEnd()
         {
-            if (avatarVideoPlayer.time >= avatarVideoPlayer.length * 0.9f)
+            if (avatarVideoPlayer.time >= avatarVideoPlayer.length * 0.93f)
             {
                 selectButton.SetActive(true);
                 selectButtonVisible = true;
+            }
+        }
+
+        private void CheckStartStockVideo()
+        {
+            if (avatarVideoPlayer.time >= avatarVideoPlayer.length * 0.5625f)
+            {
+                StartCoroutine(FadeInStockVideo());
+                stockVideoStarted = true;
             }
         }
 
@@ -109,6 +129,24 @@ namespace StartScene
             }
 
             uiCanvasGroup.alpha = 1;
+        }
+
+        private IEnumerator FadeInStockVideo()
+        {
+            float elapsedTime = 0f;
+            stockVideoPlayer.Play();
+
+            while (elapsedTime < fadeDuration)
+            {
+                float alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+                stockRawImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, alpha);
+                frameImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, alpha);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            stockRawImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, 1f);
+            frameImage.color = new Color(stockRawImage.color.r, stockRawImage.color.g, stockRawImage.color.b, 1f);
         }
 
         private void OnVideoFinished(VideoPlayer vp)
