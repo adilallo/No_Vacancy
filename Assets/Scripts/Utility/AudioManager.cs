@@ -105,4 +105,17 @@ public class AudioManager : MonoBehaviour
         audioSource.Stop();
         audioSource.volume = 1;
     }
+
+    public IEnumerator FadeOutCurrentTrack()
+    {
+        float startVolume = audioSource.volume;
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / fadeDuration;
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume; // Reset the volume for the next track
+    }
 }

@@ -12,12 +12,17 @@ public class EndSceneManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Text leaderboardText;
+    [SerializeField] private RectTransform parentPanelRectTransform;
+
+    [Header("Video")]
+    [SerializeField] private VideoPlayer avatarVideoPlayer;  // Avatar Video Player
+    [SerializeField] private CanvasGroup avatarCanvasGroup;  // CanvasGroup to control avatar video fade
 
     [Header("Audio")]
     [SerializeField] private List<AudioClip> endSceneAudioClips;
 
     [Header("Scrolling")]
-    [SerializeField] private float scrollSpeed = 50f;  // Speed at which the text scrolls
+    [SerializeField] private float scrollSpeed = 50f;
     private RectTransform leaderboardRectTransform;
 
     void Start()
@@ -26,21 +31,21 @@ public class EndSceneManager : MonoBehaviour
 
         DisplayLeaderboard();
 
-        if (uiCanvasGroup != null)
-        {
-            uiCanvasGroup.alpha = 0;
-            StartCoroutine(FadeInUI());
-        }
-
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayPlaylist(endSceneAudioClips, true);
-            AudioManager.Instance.OnPlaylistFinished += LoadFirstScene;
-        }
+        avatarVideoPlayer.Prepare();
 
         leaderboardRectTransform = leaderboardText.GetComponent<RectTransform>();
 
-        StartCoroutine(ScrollLeaderboardText());
+        // Ensure the UI is invisible initially
+        uiCanvasGroup.alpha = 0;
+
+        // Fade out the previous scene's audio
+        if (AudioManager.Instance != null)
+        {
+            StartCoroutine(AudioManager.Instance.FadeOutCurrentTrack());  // Fade out middle scene audio
+        }
+
+        // Start the avatar video fade-in and play process
+        StartCoroutine(PlayAvatarVideo());
     }
 
     void OnDisable()
@@ -94,6 +99,47 @@ public class EndSceneManager : MonoBehaviour
         SceneManager.LoadScene("Start");
     }
 
+    private IEnumerator PlayAvatarVideo()
+    {
+        // Fade in the avatar video
+        float elapsedTime = 0f;
+        avatarCanvasGroup.alpha = 0;
+        avatarVideoPlayer.Play();
+
+        while (elapsedTime < fadeDuration)
+        {
+            avatarCanvasGroup.alpha = Mathf.Lerp(0, 1, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        avatarCanvasGroup.alpha = 1;
+
+        // Wait until the avatar video is done playing
+        yield return new WaitUntil(() => avatarVideoPlayer.isPlaying == false);
+
+        // Fade out the avatar video
+        elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            avatarCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        avatarCanvasGroup.alpha = 0;
+
+        // After the avatar video is done, fade in the UI and start the audio playlist
+        StartCoroutine(FadeInUI());
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayPlaylist(endSceneAudioClips, true);
+            AudioManager.Instance.OnPlaylistFinished += LoadFirstScene;
+        }
+
+        StartCoroutine(ScrollLeaderboardText());
+    }
+
     private IEnumerator FadeInUI()
     {
         float elapsedTime = 0f;
@@ -109,8 +155,14 @@ public class EndSceneManager : MonoBehaviour
 
     private IEnumerator ScrollLeaderboardText()
     {
-        float startY = leaderboardRectTransform.rect.height * -1;
-        float endY = leaderboardRectTransform.rect.height; 
+        yield return null; // Ensure layout updates before proceeding
+        leaderboardRectTransform.ForceUpdateRectTransforms();
+
+        float textHeight = leaderboardRectTransform.rect.height;
+        float parentHeight = parentPanelRectTransform.rect.height;
+
+        float startY = -textHeight;
+        float endY = parentHeight + textHeight;
 
         leaderboardRectTransform.anchoredPosition = new Vector2(leaderboardRectTransform.anchoredPosition.x, startY);
 
