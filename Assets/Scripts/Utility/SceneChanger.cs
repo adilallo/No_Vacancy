@@ -73,10 +73,31 @@ namespace Utility
 #endif
         }
 
-        private void SetResolution(int width, int height, bool fullscreen)
+        private void SetResolution(int targetWidth, int targetHeight, bool fullscreen)
         {
-            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-            Screen.SetResolution(width, height, fullscreen);
+            // Get the current screen width and height
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+
+            // Calculate the aspect ratios
+            float targetAspect = (float)targetWidth / (float)targetHeight;
+            float screenAspect = screenWidth / screenHeight;
+
+            // Determine if we need to adjust width or height to preserve the aspect ratio
+            if (screenAspect > targetAspect)
+            {
+                // Screen is wider than target, adjust width
+                int adjustedWidth = Mathf.RoundToInt(targetHeight * screenAspect);
+                Screen.SetResolution(adjustedWidth, targetHeight, fullscreen);
+            }
+            else
+            {
+                // Screen is taller than target, adjust height
+                int adjustedHeight = Mathf.RoundToInt(targetWidth / screenAspect);
+                Screen.SetResolution(targetWidth, adjustedHeight, fullscreen);
+            }
+
+            Screen.fullScreenMode = fullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
         }
     }
 }
