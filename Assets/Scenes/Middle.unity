@@ -1427,7 +1427,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1560943318}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 6d6c6759c44d9433c9a112e933d8d4dc, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: be0a1ab6fb16a44db92588aa056825b1, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -1827,17 +1827,17 @@ MonoBehaviour:
   - {fileID: 32900000, guid: 41691a4f1ebc34faab089d3561d1cb4c, type: 3}
   - {fileID: 32900000, guid: 653ba7176b8d245539528fb64fab12b9, type: 3}
   avatarVideoClips:
-  - {fileID: 32900000, guid: 6d6c6759c44d9433c9a112e933d8d4dc, type: 3}
-  - {fileID: 32900000, guid: e55d9a35c91624fd0bb41a2e2617fd98, type: 3}
-  - {fileID: 32900000, guid: ab10d2752c7e64fd995fdff7b41a3e1a, type: 3}
-  - {fileID: 32900000, guid: 404fdc45925374848952960bbfe26e64, type: 3}
-  - {fileID: 32900000, guid: 40545c465764f4d1faa34d0479dcbce0, type: 3}
-  - {fileID: 32900000, guid: 7a2a6b03e42364e2b8a996c2a30d018b, type: 3}
-  - {fileID: 32900000, guid: 0b513ea2a116746c7994d5bd19180232, type: 3}
-  - {fileID: 32900000, guid: 661390ac965054b14868d0c8147e6300, type: 3}
-  - {fileID: 32900000, guid: 4c94e10ba454446e38b27b31868ba886, type: 3}
-  - {fileID: 32900000, guid: 6c246af4500694c85bf6e0b727fad0d5, type: 3}
-  - {fileID: 32900000, guid: 337cc32cf07fb4604bbd45e62bd4fcdf, type: 3}
+  - {fileID: 32900000, guid: 63941efebb918432185d1f8e5f32af15, type: 3}
+  - {fileID: 32900000, guid: 3a33654b31771418ca148c9f6a3d34c6, type: 3}
+  - {fileID: 32900000, guid: 44f31a510e5a0408cad613a29850cece, type: 3}
+  - {fileID: 32900000, guid: ed544de288eb74dae8ebd222cd5dbd3c, type: 3}
+  - {fileID: 32900000, guid: 185329649f42f47fcbc18df69fe75ca2, type: 3}
+  - {fileID: 32900000, guid: a3fb5cb9bc1f347c6b70f3b3a813f7b8, type: 3}
+  - {fileID: 32900000, guid: 3c982b41ee26d49b5bcd8b1a01ca6ce0, type: 3}
+  - {fileID: 32900000, guid: db31d66ab96e3472f90156398829649d, type: 3}
+  - {fileID: 32900000, guid: 43dc4d9b9a8104daba4db1430731431a, type: 3}
+  - {fileID: 32900000, guid: f8a6c4f5df4ad4cd5aed260164a33c22, type: 3}
+  - {fileID: 32900000, guid: 1b989eea3b3694c5491db7406d47030a, type: 3}
   canvas: {fileID: 476433019}
   middleSceneAudioClips:
   - {fileID: 8300000, guid: 889dbd5990f714171ae932a8719df50b, type: 3}
