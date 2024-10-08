@@ -8,12 +8,13 @@ public class ManageSwarm : MonoBehaviour
     public int amount;
     public GameObject cam_rig;
     public List<Agent> allAgents;
+    public float rotationSpeed = 30f;
 
     void Start()
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject selectedPrefab = agent_prefabs[Random.Range(0, agent_prefabs.Count)];
+            GameObject selectedPrefab = agent_prefabs[i % agent_prefabs.Count];
             GameObject newAgent = Instantiate(selectedPrefab, Random.insideUnitSphere * spread, Quaternion.identity);
 
             Agent agentScript = newAgent.GetComponent<Agent>();
@@ -36,26 +37,30 @@ public class ManageSwarm : MonoBehaviour
 
         cam_rig.transform.position = Vector3.MoveTowards(cam_rig.transform.position, average, 0.1f);
 
-        RandomizeControls();
+        UpdateControlsWithMouse();
+
+        RotateAgents();
     }
 
-    void RandomizeControls()
+    void UpdateControlsWithMouse()
     {
-        // Generate random values between 0 and 1 for each property
-        float randomCohesionRadius = Random.Range(0f, 1f);
-        float randomCohesionStrength = Random.Range(0f, 1f);
-        float randomSeparationRadius = Random.Range(0f, 1f);
-        float randomSeparationStrength = Random.Range(0f, 1f);
-        float randomAllignmentRadius = Random.Range(0f, 1f);
-        float randomAllignmentStrength = Random.Range(0f, 1f);
+        float normalizedMouseX = Mathf.Clamp01(Input.mousePosition.x / Screen.width);
+        float normalizedMouseY = Mathf.Clamp01(Input.mousePosition.y / Screen.height);
 
-        // Apply the random values to all agents
-        updateCohesionRadius(randomCohesionRadius);
-        updateCohesionStrength(randomCohesionStrength);
-        updateSeparationRadius(randomSeparationRadius);
-        updateSeparationStrength(randomSeparationStrength);
-        updateAllignmentRadius(randomAllignmentRadius);
-        updateAllignmentStrength(randomAllignmentStrength);
+        updateCohesionRadius(normalizedMouseX);
+        updateCohesionStrength(normalizedMouseY);
+        updateSeparationRadius(normalizedMouseX);
+        updateSeparationStrength(normalizedMouseY);
+        updateAllignmentRadius(normalizedMouseX);
+        updateAllignmentStrength(normalizedMouseY);
+    }
+
+    void RotateAgents()
+    {
+        foreach (Agent agent in allAgents)
+        {
+            agent.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        }
     }
 
     public void updateCohesionRadius(float val)
@@ -65,6 +70,7 @@ public class ManageSwarm : MonoBehaviour
             a.cohesion_radius = val;
         }
     }
+
     public void updateCohesionStrength(float val)
     {
         foreach (Agent a in allAgents)
@@ -72,6 +78,7 @@ public class ManageSwarm : MonoBehaviour
             a.cohesion_strength = val;
         }
     }
+
     public void updateSeparationRadius(float val)
     {
         foreach (Agent a in allAgents)
@@ -79,6 +86,7 @@ public class ManageSwarm : MonoBehaviour
             a.separation_radius = val;
         }
     }
+
     public void updateSeparationStrength(float val)
     {
         foreach (Agent a in allAgents)
@@ -86,6 +94,7 @@ public class ManageSwarm : MonoBehaviour
             a.separation_strength = val;
         }
     }
+
     public void updateAllignmentRadius(float val)
     {
         foreach (Agent a in allAgents)
@@ -93,6 +102,7 @@ public class ManageSwarm : MonoBehaviour
             a.allignment_radius = val;
         }
     }
+
     public void updateAllignmentStrength(float val)
     {
         foreach (Agent a in allAgents)
